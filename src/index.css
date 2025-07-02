@@ -39,11 +39,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-lib-background: #65CCB8; 
-  --color-lib-secondary-background: #57BA98; 
-  --color-lib-black: #182628; 
-  --color-lib-green: #3B945E; 
-  --color-lib-white: #F2F2F2; 
+  --color-lib-background: #EDC7B7; 
+  --color-lib-orange: #AC3B61; 
+  --color-lib-blue: #123C69; 
+  --color-lib-gray: #BAB2B5; 
+  --color-lib-white: #EEE2DC; 
 }
 
 :root {

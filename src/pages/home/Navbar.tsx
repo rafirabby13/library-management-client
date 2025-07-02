@@ -1,20 +1,10 @@
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
+import {  Menu } from "lucide-react";
 
 import {
     Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+
 import {
     Sheet,
     SheetContent,
@@ -22,7 +12,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 interface MenuItem {
     title: string;
@@ -78,15 +68,15 @@ const Navbar = ({
         },
         {
             title: "Borrow Summary",
-            url: "/borrowSummery",
+            url: "/borrowSummary",
         },
         {
             title: "Blog",
-            url: "#",
+            url: "/blog",
         },
     ]
     return (
-        <section className="py-4 bg-lib-background">
+        <section className="py-4 bg-lib-orange text-lib-white">
             <div className=" max-w-[85%] mx-auto">
                 {/* Desktop Menu */}
                 <nav className="hidden justify-between lg:flex">
@@ -98,12 +88,16 @@ const Navbar = ({
                                 {logo.title}
                             </span>
                         </a>
-                        <div className="flex items-center gap-3">
-                            {menu.map((item) => (<Link to={item.url} className="font-bold text-lib-green px-1 rounded-sm bg-lib-white ">{item.title}</Link>))}
+                        <div className="flex items-center gap-5">
+                            {menu.map((item,i) => (<NavLink key={i} to={item.url} className={({ isActive }) =>
+                                isActive
+                                    ? "text-lib-green font-semibold border-b-2 border-lib-green"
+                                    : "text-lib-black font-semibold hover:text-lib-green"
+                            }>{item.title}</NavLink>))}
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button asChild variant="outline" size="sm" className="bg-lib-white text-lib-green border-none">
+                        <Button asChild variant="outline" size="sm" className="bg-lib-background text-lib-orange border-none">
                             <a href={auth.login.url}>{auth.login.title}</a>
                         </Button>
                         <Button asChild size="sm">
@@ -140,7 +134,11 @@ const Navbar = ({
                                         className="flex w-full flex-col gap-4"
                                     >
 
-                                        {menu.map((item) => (<Link to={item.url} >{item.title}</Link>))}
+                                        {menu.map((item) => (<NavLink to={item.url} className={({ isActive }) =>
+                                            isActive
+                                                ? "text-lib-green font-semibold border-b-2 border-lib-green"
+                                    : "text-lib-black font-semibold hover:text-lib-green"
+                                        }>{item.title}</NavLink>))}
 
                                     </Accordion>
 

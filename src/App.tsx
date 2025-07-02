@@ -1,14 +1,26 @@
-import { Outlet } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import { Navbar } from './pages/home/Navbar'
+import AllBooks from './pages/AllBooks'
 
 function App() {
 
+  const location = useLocation()
+  // console.log(location)
+
   return (
-    <div>
-      <Navbar/>
-      <Outlet/>
-      
-     
+    <div className='space-y-10'>
+      <Navbar />
+      <div className='max-w-[85%] mx-auto'>
+        {
+          location.pathname == '/' && <AllBooks />
+
+        }
+      </div>
+      <div className='max-w-[85%] mx-auto'>
+        <Outlet />
+      </div>
+
+
     </div>
   )
 }
