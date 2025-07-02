@@ -1,97 +1,184 @@
 import { Button } from "@/components/ui/button"
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useForm, type SubmitHandler } from "react-hook-form"
+import { useForm } from "react-hook-form"
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
+    Select, SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 
+const schema = z.object({
+    title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
+    author: z.string({ required_error: "Author is required" }).min(1, "Author cannot be empty"),
+    genre: z.string({ required_error: "Genre is required" }).min(1, "Please select a genre"),
+    isbn: z.string({ required_error: "ISBN is required" }),
+    description: z.string({ required_error: "description is required" }),
+    copies: z.coerce.number({
+        required_error: 'Copies is required',
+        invalid_type_error: 'Copies must be a number',
+    }).min(0, { message: 'Copies must be at least 0' })
+});
 
-
-const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+type FormData = z.infer<typeof schema>;
 
 
 const AddBooks = () => {
-    const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      username: "",
-    },
-  })
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
-  }
 
- 
+    const form = useForm<FormData>({
+        resolver: zodResolver(schema),
+    });
+
+
+    const onSubmit = (data: FormData) => {
+        console.log(data)
+
+    }
+
+
     return (
-        <div>
+        <div >
 
-            <Dialog>
-                <form>
-                    <DialogTrigger asChild>
-                        <Button variant="outline" className="bg-lib-orange text-lib-white cursor-pointer">Open Dialog</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Add a new book</DialogTitle>
-                            <DialogDescription>
-                                Fill the form to create a new book in the list
-                            </DialogDescription>
-                        </DialogHeader>
-                   
+            <Dialog >
 
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-                                    <FormField
-                                        control={form.control}
-                                        name="username"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Username</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="username" {...field} />
-                                                </FormControl>
-                                            
-                                        
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button type="submit">Submit</Button>
-                                </form>
-                            </Form>
-                       
+                <DialogTrigger asChild>
+                    <Button variant="outline" className="bg-lib-orange text-lib-white cursor-pointer">Add A Book</Button>
+                </DialogTrigger>
+                <DialogContent className="">
+                    <DialogHeader>
+                        <DialogTitle>Add a new book</DialogTitle>
+                        <DialogDescription>
+                            Fill the form to create a new book in the list
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
-                    </DialogContent>
-                </form>
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="title">Book Title*</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Book Title" {...field} />
+
+                                        </FormControl>
+                                        <FormMessage />
+
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="author"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >Author*</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Author" {...field} />
+
+                                        </FormControl>
+                                        <FormMessage />
+
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="genre"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Genre*</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value} >
+                                            <FormControl>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Select a Genre" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent  >
+                                                <SelectItem value="FICTION">Fiction</SelectItem>
+                                                <SelectItem value="NON_FICTION">Non Fiction</SelectItem>
+                                                <SelectItem value="SCIENCE">Science</SelectItem>
+                                                <SelectItem value="HISTORY">History</SelectItem>
+                                                <SelectItem value="BIOGRAPHY">Biography</SelectItem>
+                                                <SelectItem value="FANTASY">Fantasy</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="isbn"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >ISBN Number*</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="ISBN Number" {...field} />
+
+                                        </FormControl>
+                                        <FormMessage />
+
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description*</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder="Books Description"
+                                                className="resize-none"
+                                                {...field}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="copies"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >Number of Copies*</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Number of Copies" {...field} />
+
+                                        </FormControl>
+                                        <FormMessage />
+
+                                    </FormItem>
+                                )}
+                            />
+
+
+                            <Button className="bg-lib-orange" type="submit">Add Book</Button>
+                        </form>
+
+
+
+
+
+                    </Form>
+                </DialogContent>
+
             </Dialog>
         </div>
     )
