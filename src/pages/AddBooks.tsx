@@ -15,17 +15,30 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useAddBookMutation } from "@/redux/api/baseApi"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const schema = z.object({
     title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
     author: z.string({ required_error: "Author is required" }).min(1, "Author cannot be empty"),
-    genre: z.string({ required_error: "Genre is required" }).min(1, "Please select a genre"),
+    genre: z.enum([
+        "FICTION",
+        "NON_FICTION",
+        "SCIENCE",
+        "HISTORY",
+        "BIOGRAPHY",
+        "FANTASY",
+    ]),
     isbn: z.string({ required_error: "ISBN is required" }),
-    description: z.string({ required_error: "description is required" }),
+    description: z.string().optional(),
     copies: z.coerce.number({
         required_error: 'Copies is required',
         invalid_type_error: 'Copies must be a number',
-    }).min(0, { message: 'Copies must be at least 0' })
+    }).min(0, { message: 'Copies must be at least 0' }),
+    available: z
+        .boolean()
+        .optional()
+
 });
 
 type FormData = z.infer<typeof schema>;
@@ -33,13 +46,22 @@ type FormData = z.infer<typeof schema>;
 
 const AddBooks = () => {
 
+    const [addBook] = useAddBookMutation(undefined)
+
     const form = useForm<FormData>({
         resolver: zodResolver(schema),
     });
 
 
-    const onSubmit = (data: FormData) => {
+    const onSubmit = async (data: FormData) => {
+       
+
+        if (!data.description) {
+            data.description = ''
+        }
         console.log(data)
+        const res = await addBook(data)
+        console.log('object, res', res)
 
     }
 
@@ -86,13 +108,31 @@ const AddBooks = () => {
                                         <FormControl>
                                             <Input placeholder="Author" {...field} />
 
+
                                         </FormControl>
+
                                         <FormMessage />
 
                                     </FormItem>
                                 )}
                             />
 
+
+                            <FormField
+                                control={form.control}
+                                name="isbn"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >ISBN Number*</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="ISBN Number" {...field} />
+
+                                        </FormControl>
+                                        <FormMessage />
+
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="genre"
@@ -121,25 +161,10 @@ const AddBooks = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="isbn"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel >ISBN Number*</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="ISBN Number" {...field} />
-
-                                        </FormControl>
-                                        <FormMessage />
-
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description*</FormLabel>
+                                        <FormLabel>Description</FormLabel>
                                         <FormControl>
                                             <Textarea
                                                 placeholder="Books Description"
@@ -167,6 +192,36 @@ const AddBooks = () => {
                                     </FormItem>
                                 )}
                             />
+
+
+                            <FormField
+                                control={form.control}
+                                name="available" // Your form field name
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Available (true / false)</FormLabel>
+                                        <Select
+                                           
+                                            onValueChange={(value) => field.onChange(value === 'true')}
+                                          
+                                            defaultValue={field.value !== undefined ? String(field.value) : undefined}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select availability" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="true">Yes</SelectItem>
+                                                <SelectItem value="false">No</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                        
 
 
                             <Button className="bg-lib-orange" type="submit">Add Book</Button>
