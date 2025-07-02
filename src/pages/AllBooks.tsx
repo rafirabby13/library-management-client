@@ -11,6 +11,7 @@ import { PuffLoader } from "react-spinners";
 import { Edit2, Handshake, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddBooks from "./AddBooks";
+import EditBook from "@/components/EditBook";
 const AllBooks = () => {
 
 
@@ -30,11 +31,14 @@ const AllBooks = () => {
     const books = data?.data
     // console.log(books)
 
+
+   
+
     return (
         <div>
             <div className="flex items-center justify-between pb-10">
                 <p className="text-3xl font-bold border-b-4 text-lib-orange border-lib-background">Books</p>
-                <AddBooks/>
+                <AddBooks />
             </div>
             <Table>
                 {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
@@ -58,8 +62,9 @@ const AllBooks = () => {
                                 <TableCell>{book.copies}</TableCell>
                                 <TableCell >{book.genre}</TableCell>
                                 <TableCell className="flex items-center gap-4 justify-center">
-                                    <Button className="bg-lib-blue"><Edit2/></Button>
-                                    <Button className="bg-lib-orange"><Trash2/></Button>
+                                    {/* <Button onClick={() => handeEditBook(book._id)} className="bg-lib-blue"><Edit2 /></Button> */}
+                                    <EditBook bookId={book._id} />
+                                    <Button className="bg-lib-orange"><Trash2 /></Button>
                                     <Button className="bg-green-900"><Handshake /></Button>
                                 </TableCell>
                             </TableRow>
