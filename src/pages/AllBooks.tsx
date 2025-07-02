@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import AddBooks from "./AddBooks";
 import EditBook from "@/components/EditBook";
 import Swal from 'sweetalert2'
+import BorrowBook from "@/components/BorrowBook";
 const AllBooks = () => {
 
 
@@ -88,7 +89,7 @@ const handleDeleteABook=(bookId)=>{
                                     
                                     <EditBook bookId={book._id} />
                                     <Button onClick={()=>handleDeleteABook(book._id)} className="bg-lib-orange"><Trash2 /></Button>
-                                    <Button className="bg-green-900"><Handshake /></Button>
+                                    <BorrowBook book={book._id}/>
                                 </TableCell>
                             </TableRow>
                         )

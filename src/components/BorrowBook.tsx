@@ -1,0 +1,174 @@
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
+import { CalendarIcon, Handshake } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { useBorrowBookMutation } from "@/redux/api/baseApi"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import Swal from "sweetalert2"
+import { useNavigate } from "react-router"
+const borrowBookZodschema = z.object({
+    // book: z.string().refine((val) => /^[0-9a-fA-F]{24}$/.test(val), {
+    //     message: "Invalid ObjectId format",
+    // }),
+    quantity: z.coerce.number({
+        required_error: 'Copies is required',
+        invalid_type_error: 'Copies must be a number',
+    }).min(0, { message: 'Copies must be at least 0' }),
+    dueDate: z.date({
+        required_error: "A date is required.",
+    }),
+});
+type BorrowData = z.infer<typeof borrowBookZodschema>;
+
+const BorrowBook = ({ book }) => {
+
+    const [error, setError] = useState('')
+    const [borrowBook] = useBorrowBookMutation(undefined)
+
+    const form = useForm<BorrowData>({
+        resolver: zodResolver(borrowBookZodschema),
+    });
+const navigate = useNavigate()
+
+    const onSubmit = async (data) => {
+
+
+
+
+
+        const borrowData = { book, ...data }
+        // console.log(borrowData)
+        const res = await borrowBook(borrowData)
+        if (res?.error) {
+            setError("res?.error?.data?.message")
+        }
+        if (res.data.success) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Book Updated Successfully",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            navigate('/borrowSummary')
+        }
+        // console.log('object, res', res.data)
+
+    }
+
+    return (
+        <div>
+            <Dialog >
+
+                <DialogTrigger asChild>
+                    <Button variant="outline" className="bg-lib-orange text-lib-white cursor-pointer"><Handshake /></Button>
+                </DialogTrigger>
+                <DialogContent className="">
+                    <DialogHeader>
+                        <DialogTitle>Borrow a new book</DialogTitle>
+                        {/* <DialogDescription>
+                            Fill the form to Borrow a new book in the list
+                        </DialogDescription> */}
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
+                            <FormField
+                                control={form.control}
+                                name="quantity"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >Quantity*</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Book Quantity" {...field} />
+
+                                        </FormControl>
+                                        <FormMessage >{error}</FormMessage>
+
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="dueDate"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Due date*</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant={"outline"}
+                                                        className={cn(
+                                                            "w-[240px] pl-3 text-left font-normal",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value ? (
+                                                            format(field.value, "PPP")
+                                                        ) : (
+                                                            <span>Pick a date</span>
+                                                        )}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value}
+                                                    onSelect={field.onChange}
+
+                                                    captionLayout="dropdown"
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+
+
+
+
+                            <Button className="bg-lib-orange" type="submit">Borrow Book</Button>
+                        </form>
+
+
+
+
+
+                    </Form>
+                </DialogContent>
+
+            </Dialog>
+        </div>
+    )
+}
+
+export default BorrowBook
