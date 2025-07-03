@@ -68,6 +68,7 @@ const handleDeleteABook=(bookId: string)=>{
                 {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                 <TableHeader>
                     <TableRow className="bg-lib-background text-lib-orange">
+                        <TableHead className="">No.</TableHead>
                         <TableHead className="">Title</TableHead>
                         <TableHead className="">Author</TableHead>
                         <TableHead>Available</TableHead>
@@ -78,8 +79,9 @@ const handleDeleteABook=(bookId: string)=>{
                 </TableHeader>
                 <TableBody>
                     {
-                        books?.map((book: any) =>
+                        books?.map((book: any, i:number) =>
                             <TableRow key={book.isbn}>
+                                <TableCell className="font-medium">{i+1}</TableCell>
                                 <TableCell className="font-medium">{book.title}</TableCell>
                                 <TableCell className="font-medium">{book.author}</TableCell>
                                 <TableCell>{book.available ? "available" : "Not Available"}</TableCell>
