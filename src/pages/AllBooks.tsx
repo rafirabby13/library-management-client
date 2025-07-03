@@ -8,7 +8,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { PuffLoader } from "react-spinners";
-import { Edit2, Handshake, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddBooks from "./AddBooks";
 import EditBook from "@/components/EditBook";
@@ -34,7 +34,7 @@ const AllBooks = () => {
     const books = data?.data
     // console.log(books)
 
-const handleDeleteABook=(bookId)=>{
+const handleDeleteABook=(bookId: string)=>{
     Swal.fire({
   title: "Are you sure?",
   text: "You won't be able to revert this!",
@@ -61,7 +61,7 @@ const handleDeleteABook=(bookId)=>{
     return (
         <div>
             <div className="flex items-center justify-between pb-10">
-                <p className="text-3xl font-bold border-b-4 text-lib-orange border-lib-background">Books: {books.length}</p>
+                <p className="text-3xl font-bold border-b-4 text-lib-orange border-lib-background">Books: {books?.length}</p>
                 <AddBooks />
             </div>
             <Table>

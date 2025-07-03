@@ -22,12 +22,13 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { useBorrowBookMutation } from "@/redux/api/baseApi"
+import { useBorrowBookMutation, useGetBooksQuery } from "@/redux/api/baseApi"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import Swal from "sweetalert2"
 import { useNavigate } from "react-router"
+import type { IBook, IBookResponse } from "@/types/booksType"
 const borrowBookZodschema = z.object({
     // book: z.string().refine((val) => /^[0-9a-fA-F]{24}$/.test(val), {
     //     message: "Invalid ObjectId format",
@@ -42,17 +43,20 @@ const borrowBookZodschema = z.object({
 });
 type BorrowData = z.infer<typeof borrowBookZodschema>;
 
-const BorrowBook = ({ book }) => {
+const BorrowBook = ({ book }: { book: string }) => {
 
     const [error, setError] = useState('')
     const [borrowBook] = useBorrowBookMutation(undefined)
+    const { data } = useGetBooksQuery(undefined)
+
+    const selectedBook = data.data.find((b: IBookResponse) => b._id == book)
 
     const form = useForm<BorrowData>({
         resolver: zodResolver(borrowBookZodschema),
     });
-const navigate = useNavigate()
+    const navigate = useNavigate()
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: BorrowData) => {
 
 
 
@@ -62,7 +66,14 @@ const navigate = useNavigate()
         // console.log(borrowData)
         const res = await borrowBook(borrowData)
         if (res?.error) {
-            setError("res?.error?.data?.message")
+            const err = res.error;
+            if ('data' in err) {
+                // Safe to access err.data now
+                setError((err.data as any)?.message); // or cast to your known error shape
+            } else {
+                // It's a SerializedError
+                setError("Something went wrong");
+            }
         }
         if (res.data.success) {
             Swal.fire({
@@ -87,7 +98,7 @@ const navigate = useNavigate()
                 </DialogTrigger>
                 <DialogContent className="">
                     <DialogHeader>
-                        <DialogTitle>Borrow a new book</DialogTitle>
+                        <DialogTitle>Borrow the book {selectedBook.title}</DialogTitle>
                         {/* <DialogDescription>
                             Fill the form to Borrow a new book in the list
                         </DialogDescription> */}
@@ -100,7 +111,7 @@ const navigate = useNavigate()
                                 name="quantity"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel >Quantity*</FormLabel>
+                                        <FormLabel >Quantity* ( Available: {selectedBook.copies} )</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Book Quantity" {...field} />
 
