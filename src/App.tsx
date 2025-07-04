@@ -1,11 +1,11 @@
-import { Outlet, useLocation, useNavigate } from 'react-router'
+import { Outlet, useLocation} from 'react-router'
 import { Navbar } from './pages/home/Navbar'
 import AllBooks from './pages/AllBooks'
 
 function App() {
 
   const location = useLocation()
-  // console.log(location)
+
 
   return (
     <div className='space-y-10'>
