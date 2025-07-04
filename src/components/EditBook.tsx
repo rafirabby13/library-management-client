@@ -4,50 +4,50 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+
 import {
     Select, SelectContent,
-    SelectGroup,
+
     SelectItem,
-    SelectLabel,
+
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { useAddBookMutation, useGetBooksQuery, useUpdateBookMutation } from "@/redux/api/baseApi"
-import { Checkbox } from "@/components/ui/checkbox"
+import {  useGetBooksQuery, useUpdateBookMutation } from "@/redux/api/baseApi"
+
 import { Edit2 } from "lucide-react"
 import { PuffLoader } from "react-spinners"
 import { useState } from "react"
 import Swal from "sweetalert2"
-import { useNavigate } from "react-router"
+
 import type { IBookResponse } from "@/types/booksType"
 
-const schema = z.object({
-    title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
-    author: z.string({ required_error: "Author is required" }).min(1, "Author cannot be empty"),
-    genre: z.enum([
-        "FICTION",
-        "NON_FICTION",
-        "SCIENCE",
-        "HISTORY",
-        "BIOGRAPHY",
-        "FANTASY",
-    ]),
-    isbn: z.string({ required_error: "ISBN is required" }),
-    description: z.string().optional(),
-    copies: z.coerce.number({
-        required_error: 'Copies is required',
-        invalid_type_error: 'Copies must be a number',
-    }).min(0, { message: 'Copies must be at least 0' }),
-    available: z
-        .boolean()
-        .optional()
+// const schema = z.object({
+//     title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
+//     author: z.string({ required_error: "Author is required" }).min(1, "Author cannot be empty"),
+//     genre: z.enum([
+//         "FICTION",
+//         "NON_FICTION",
+//         "SCIENCE",
+//         "HISTORY",
+//         "BIOGRAPHY",
+//         "FANTASY",
+//     ]),
+//     isbn: z.string({ required_error: "ISBN is required" }),
+//     description: z.string().optional(),
+//     copies: z.coerce.number({
+//         required_error: 'Copies is required',
+//         invalid_type_error: 'Copies must be a number',
+//     }).min(0, { message: 'Copies must be at least 0' }),
+//     available: z
+//         .boolean()
+//         .optional()
 
-});
+// });
 
-type FormData = z.infer<typeof schema>;
+// type FormData = z.infer<typeof schema>;
 const EditBook = ({ bookId }: {bookId: string}) => {
     const [open, setOpen] = useState(false)
 
@@ -88,7 +88,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
         const updatedBookData = { title, author, isbn, genre, description, copies, available }
 
         const res = await updateBook({ bookId, updatedBookData })
-        // const navigate = useNavigate()
+        
 
         if (res.data?.success) {
             if (res?.data?.success) {
