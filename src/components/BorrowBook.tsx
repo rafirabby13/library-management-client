@@ -75,7 +75,7 @@ const BorrowBook = ({ book }: { book: string }) => {
                 setError("Something went wrong");
             }
         }
-        if (res.data.success) {
+        if (res?.data?.success) {
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -94,7 +94,7 @@ const BorrowBook = ({ book }: { book: string }) => {
             <Dialog >
 
                 <DialogTrigger asChild>
-                    <Button variant="outline" className="bg-lib-orange text-lib-white cursor-pointer"><Handshake /></Button>
+                    <Button variant="outline" className="bg-lib-white text-lib-orange border-2 border-lib-orange font-bold cursor-pointer"><Handshake /></Button>
                 </DialogTrigger>
                 <DialogContent className="">
                     <DialogHeader>

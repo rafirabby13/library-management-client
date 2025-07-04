@@ -17,7 +17,7 @@ const BorrowSummary = () => {
   }
 
   const borrowSummary = data?.data
-  console.log(borrowSummary)
+
   return (
     <div>
       <div>
@@ -43,7 +43,7 @@ const BorrowSummary = () => {
                   <TableCell className="font-medium">{i+1}</TableCell>
                   <TableCell className="font-medium">{book.book.title}</TableCell>
                   <TableCell className="font-medium">{book.book.isbn}</TableCell>
-                  <TableCell >{book.totalQuantity}</TableCell>
+                  <TableCell className="font-medium">{book.totalQuantity}</TableCell>
 
                 </TableRow>
               )

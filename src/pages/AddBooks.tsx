@@ -17,6 +17,9 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { useAddBookMutation } from "@/redux/api/baseApi"
 import { Checkbox } from "@/components/ui/checkbox"
+import Swal from "sweetalert2"
+import { useNavigate } from "react-router"
+import { useState } from "react"
 
 const schema = z.object({
     title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
@@ -45,23 +48,55 @@ type FormData = z.infer<typeof schema>;
 
 
 const AddBooks = () => {
-
+    const [open, setOpen] = useState(false)
     const [addBook] = useAddBookMutation(undefined)
 
     const form = useForm<FormData>({
         resolver: zodResolver(schema),
     });
-
+    const navigate = useNavigate()
 
     const onSubmit = async (data: FormData) => {
-       
 
-        if (!data.description) {
-            data.description = ''
+
+        try {
+            if (!data.description) {
+                data.description = ''
+            }
+            console.log(data)
+            const res = await addBook(data)
+            console.log('object, res', res)
+            if (res?.data?.success) {
+                setOpen(false)
+                form.reset();
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Book Created Successfully"
+
+                });
+
+                navigate('/allBooks')
+            }
+
+        } catch (error: any) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `${error.message}`,
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });
         }
-        console.log(data)
-        const res = await addBook(data)
-        console.log('object, res', res)
 
     }
 
@@ -69,10 +104,16 @@ const AddBooks = () => {
     return (
         <div >
 
-            <Dialog >
+            <Dialog open={open}
+                onOpenChange={(isOpen) => {
+                    if (!isOpen) {
+                        form.reset() // optional
+                    }
+                    setOpen(isOpen)
+                }}>
 
-                <DialogTrigger asChild>
-                    <Button variant="outline" className="bg-lib-orange text-lib-white cursor-pointer">Add A Book</Button>
+                <DialogTrigger >
+                    <Button onClick={() => setOpen(true)} variant="outline" className="bg-lib-orange text-lib-white cursor-pointer">Add A Book</Button>
                 </DialogTrigger>
                 <DialogContent className="">
                     <DialogHeader>
@@ -201,9 +242,9 @@ const AddBooks = () => {
                                     <FormItem>
                                         <FormLabel>Available (true / false)</FormLabel>
                                         <Select
-                                           
+
                                             onValueChange={(value) => field.onChange(value === 'true')}
-                                          
+
                                             defaultValue={field.value !== undefined ? String(field.value) : undefined}
                                         >
                                             <FormControl>
@@ -221,7 +262,7 @@ const AddBooks = () => {
                                 )}
                             />
 
-                        
+
 
 
                             <Button className="bg-lib-orange" type="submit">Add Book</Button>

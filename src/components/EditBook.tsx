@@ -19,6 +19,10 @@ import { useAddBookMutation, useGetBooksQuery, useUpdateBookMutation } from "@/r
 import { Checkbox } from "@/components/ui/checkbox"
 import { Edit2 } from "lucide-react"
 import { PuffLoader } from "react-spinners"
+import { useState } from "react"
+import Swal from "sweetalert2"
+import { useNavigate } from "react-router"
+import type { IBookResponse } from "@/types/booksType"
 
 const schema = z.object({
     title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
@@ -44,7 +48,8 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
-const EditBook = ({ bookId }) => {
+const EditBook = ({ bookId }: {bookId: string}) => {
+    const [open, setOpen] = useState(false)
 
     const { data, isLoading, isError } = useGetBooksQuery(undefined)
     const [updateBook] = useUpdateBookMutation(undefined)
@@ -60,7 +65,7 @@ const EditBook = ({ bookId }) => {
         console.log('error')
     }
 
-    const book = data?.data?.find(book => book._id === bookId)
+    const book = data?.data?.find((book: IBookResponse) => book._id === bookId)
 
     // console.log(book)
 
@@ -82,7 +87,34 @@ const EditBook = ({ bookId }) => {
 
         const updatedBookData = { title, author, isbn, genre, description, copies, available }
 
-        const res = await updateBook({bookId, updatedBookData})
+        const res = await updateBook({ bookId, updatedBookData })
+        // const navigate = useNavigate()
+
+        if (res.data?.success) {
+            if (res?.data?.success) {
+                setOpen(false);
+                form.reset();
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "The book has been created successfully!"
+                });
+
+             
+            }
+
+
+        }
 
 
 
@@ -92,7 +124,7 @@ const EditBook = ({ bookId }) => {
 
     return (
         <div>
-            <Dialog >
+            <Dialog open={open} onOpenChange={setOpen}>
 
                 <DialogTrigger asChild>
                     <Button variant="outline" className="bg-lib-blue text-lib-white cursor-pointer"><Edit2 /></Button>
