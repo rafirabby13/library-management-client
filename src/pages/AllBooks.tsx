@@ -30,7 +30,7 @@ const AllBooks = () => {
     const { data, isLoading, isError } = useGetBooksQuery({ page: currentPage, limit })
     const [deleteBook] = useDeleteBookMutation(undefined)
     if (isLoading) {
-        return <div className="sweet-loading flex justify-center py-10 ">
+        return <div className="sweet-loading flex justify-center ">
 
 
 

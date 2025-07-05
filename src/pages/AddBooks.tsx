@@ -112,8 +112,8 @@ const AddBooks = () => {
                     setOpen(isOpen)
                 }}>
 
-                <DialogTrigger >
-                    <Button onClick={() => setOpen(true)} variant="outline" className="bg-lib-orange text-lib-white cursor-pointer">Add A Book</Button>
+                <DialogTrigger className="">
+                    <Button onClick={() => setOpen(true)} variant="outline" className="bg-lib-orange text-lib-white cursor-pointer ">Add A Book</Button>
                 </DialogTrigger>
                 <DialogContent className="w-full sm:max-w-[480px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>

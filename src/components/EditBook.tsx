@@ -15,14 +15,14 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import {  useGetBooksQuery, useUpdateBookMutation } from "@/redux/api/baseApi"
+import {  useGetASingleBookQuery, useUpdateBookMutation } from "@/redux/api/baseApi"
 
 import { Edit2 } from "lucide-react"
 import { PuffLoader } from "react-spinners"
 import { useState } from "react"
 import Swal from "sweetalert2"
 
-import type { IBookResponse } from "@/types/booksType"
+
 
 // const schema = z.object({
 //     title: z.string({ required_error: "Title is required" }).min(1, "Title cannot be empty"),
@@ -51,7 +51,7 @@ import type { IBookResponse } from "@/types/booksType"
 const EditBook = ({ bookId }: {bookId: string}) => {
     const [open, setOpen] = useState(false)
     const form = useForm();
-    const { data, isLoading, isError } = useGetBooksQuery(undefined)
+    const { data, isLoading, isError } = useGetASingleBookQuery(bookId)
     const [updateBook] = useUpdateBookMutation(undefined)
     if (isLoading) {
         return <div className="sweet-loading">
@@ -65,7 +65,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
         console.log('error',isError)
     }
 
-    const book = data?.data?.find((book: IBookResponse) => book._id === bookId)
+    const book = data?.data
 
     // console.log(book)
 
