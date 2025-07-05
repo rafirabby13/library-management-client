@@ -23,7 +23,7 @@ function App() {
         <Outlet />
       </div>
 
-      <div className='mt-10'>
+      <div className='mt-20'>
         <Footer />
       </div>
 
