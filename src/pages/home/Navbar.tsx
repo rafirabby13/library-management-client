@@ -79,10 +79,10 @@ const Navbar = ({
                 <nav className="hidden justify-between lg:flex">
                     <div className="flex items-center gap-36">
                         {/* Logo */}
-                        <a href={logo.url} className="flex items-center gap-2">
+                        <Link to='/' className="flex items-center gap-2">
                             <img src={logo.src} className="max-h-8 drop-shadow-lib-gray fill-white drop-shadow-xl/50" alt={logo.alt} />
 
-                        </a>
+                        </Link>
                         <div className="flex items-center gap-5">
                             {menu.map((item, i) => (<NavLink key={i} to={item.url} className={({ isActive }) =>
                                 isActive
