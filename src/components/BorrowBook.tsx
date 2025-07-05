@@ -11,7 +11,7 @@ import { Calendar } from "@/components/ui/calendar"
 import {
     Form,
     FormControl,
-    
+
     FormField,
     FormItem,
     FormLabel,
@@ -30,7 +30,7 @@ import Swal from "sweetalert2"
 import { useNavigate } from "react-router"
 import { PuffLoader } from "react-spinners"
 const borrowBookZodschema = z.object({
-   
+
     quantity: z.coerce.number({
         required_error: 'Copies is required',
         invalid_type_error: 'Copies must be a number',
@@ -49,7 +49,7 @@ const BorrowBook = ({ book }: { book: string }) => {
     const [error, setError] = useState('')
     const [borrowBook] = useBorrowBookMutation(undefined)
     const { data, isLoading } = useGetASingleBookQuery(book)
-     if (isLoading) {
+    if (isLoading) {
         return <div className="sweet-loading flex justify-center py-10 ">
 
 
@@ -59,7 +59,7 @@ const BorrowBook = ({ book }: { book: string }) => {
     }
 
     const selectedBook = data?.data
-// console.log(selectedBook)
+    // console.log(selectedBook)
 
 
     const onSubmit = async (data: BorrowData) => {
@@ -158,8 +158,11 @@ const BorrowBook = ({ book }: { book: string }) => {
                                                     mode="single"
                                                     selected={field.value}
                                                     onSelect={field.onChange}
+                                                    disabled={(date) =>
+                                                        date < new Date() }
+                    
 
-                                                    captionLayout="dropdown"
+                                                captionLayout="dropdown"
                                                 />
                                             </PopoverContent>
                                         </Popover>
