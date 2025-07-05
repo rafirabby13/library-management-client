@@ -2,11 +2,15 @@
 
 ###
 
+<h4 align="left">https://library-management-client-indol.vercel.app/</h4>
+
+###
+
 <h2 align="left">Minimal Library Management System</h2>
 
 ###
 
-<h4 align="left">https://library-management-client-indol.vercel.app/</h4>
+<p align="left">This system will allow users to view a list of books, perform CRUD operations, borrow books, and view a simple borrow summary—all without authentication, category filters, or payment integration.</p>
 
 ###
 
