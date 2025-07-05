@@ -22,7 +22,7 @@ const BorrowSummary = () => {
     <div>
       <div>
         <div className="flex items-center justify-between pb-10">
-          <p className="text-3xl font-bold border-b-4 text-lib-orange border-lib-background">Books: {borrowSummary?.length}</p>
+          <p className="text-3xl font-bold border-b-4 text-lib-orange border-lib-background">Borrow Summary</p>
 
         </div>
         <Table>

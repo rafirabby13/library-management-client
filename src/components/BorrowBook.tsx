@@ -47,7 +47,7 @@ const BorrowBook = ({ book }: { book: string }) => {
     const [borrowBook] = useBorrowBookMutation(undefined)
     const { data } = useGetBooksQuery(undefined)
 
-    const selectedBook = data.data.find((b: IBookResponse) => b._id == book)
+    const selectedBook = data?.data?.find((b: IBookResponse) => b._id == book)
 
     const form = useForm<BorrowData>({
         resolver: zodResolver(borrowBookZodschema),
@@ -96,7 +96,7 @@ const BorrowBook = ({ book }: { book: string }) => {
                 </DialogTrigger>
                 <DialogContent className="w-full sm:max-w-[480px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle>Borrow the book {selectedBook.title}</DialogTitle>
+                        <DialogTitle>Borrow the book {selectedBook?.title}</DialogTitle>
                         {/* <DialogDescription>
                             Fill the form to Borrow a new book in the list
                         </DialogDescription> */}

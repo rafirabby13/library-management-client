@@ -50,7 +50,7 @@ import type { IBookResponse } from "@/types/booksType"
 // type FormData = z.infer<typeof schema>;
 const EditBook = ({ bookId }: {bookId: string}) => {
     const [open, setOpen] = useState(false)
-
+    const form = useForm();
     const { data, isLoading, isError } = useGetBooksQuery(undefined)
     const [updateBook] = useUpdateBookMutation(undefined)
     if (isLoading) {
@@ -62,7 +62,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
         </div>
     }
     if (isError) {
-        console.log('error')
+        console.log('error',isError)
     }
 
     const book = data?.data?.find((book: IBookResponse) => book._id === bookId)
@@ -70,7 +70,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
     // console.log(book)
 
 
-    const form = useForm();
+
 
 
     const onSubmit = async (data: any) => {
@@ -90,7 +90,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
         const res = await updateBook({ bookId, updatedBookData })
         
 
-        if (res.data?.success) {
+        if (res?.data?.success) {
             if (res?.data?.success) {
                 setOpen(false);
                 form.reset();
@@ -131,7 +131,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                 </DialogTrigger>
                 <DialogContent className="w-full sm:max-w-[480px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle>Edit The Book - {book.title}</DialogTitle>
+                        <DialogTitle>Edit The Book - {book?.title}</DialogTitle>
                         <DialogDescription>
                             Fill the form to Update the book in the list
                         </DialogDescription>
@@ -146,7 +146,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                                     <FormItem>
                                         <FormLabel htmlFor="title">Book Title*</FormLabel>
                                         <FormControl>
-                                            <Input defaultValue={book.title} placeholder="Book Title" {...field} />
+                                            <Input defaultValue={book?.title} placeholder="Book Title" {...field} />
 
                                         </FormControl>
                                         <FormMessage />
@@ -161,7 +161,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                                     <FormItem>
                                         <FormLabel >Author*</FormLabel>
                                         <FormControl>
-                                            <Input defaultValue={book.author} placeholder="Author" {...field} />
+                                            <Input defaultValue={book?.author} placeholder="Author" {...field} />
 
 
                                         </FormControl>
@@ -180,7 +180,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                                     <FormItem>
                                         <FormLabel >ISBN Number*</FormLabel>
                                         <FormControl>
-                                            <Input defaultValue={book.isbn} placeholder="ISBN Number" {...field} />
+                                            <Input defaultValue={book?.isbn} placeholder="ISBN Number" {...field} />
 
                                         </FormControl>
                                         <FormMessage />
@@ -194,7 +194,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Genre*</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={book.genre}>
+                                        <Select onValueChange={field.onChange} defaultValue={book?.genre}>
                                             <FormControl>
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Select a Genre" />
@@ -222,7 +222,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                                         <FormLabel>Description</FormLabel>
                                         <FormControl>
                                             <Textarea
-                                                defaultValue={book.description}
+                                                defaultValue={book?.description}
                                                 placeholder="Books Description"
                                                 className="resize-none"
                                                 {...field}
@@ -240,7 +240,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                                     <FormItem>
                                         <FormLabel >Number of Copies*</FormLabel>
                                         <FormControl>
-                                            <Input defaultValue={book.copies} placeholder="Number of Copies" {...field} />
+                                            <Input defaultValue={book?.copies} placeholder="Number of Copies" {...field} />
 
                                         </FormControl>
                                         <FormMessage />
