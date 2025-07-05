@@ -22,13 +22,13 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { useBorrowBookMutation, useGetBooksQuery } from "@/redux/api/baseApi"
+import { useBorrowBookMutation, useGetASingleBookQuery } from "@/redux/api/baseApi"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import Swal from "sweetalert2"
 import { useNavigate } from "react-router"
-import type {  IBookResponse } from "@/types/booksType"
+import { PuffLoader } from "react-spinners"
 const borrowBookZodschema = z.object({
    
     quantity: z.coerce.number({
@@ -42,17 +42,25 @@ const borrowBookZodschema = z.object({
 type BorrowData = z.infer<typeof borrowBookZodschema>;
 
 const BorrowBook = ({ book }: { book: string }) => {
-
-    const [error, setError] = useState('')
-    const [borrowBook] = useBorrowBookMutation(undefined)
-    const { data } = useGetBooksQuery(undefined)
-
-    const selectedBook = data?.data?.find((b: IBookResponse) => b._id == book)
-
     const form = useForm<BorrowData>({
         resolver: zodResolver(borrowBookZodschema),
     });
     const navigate = useNavigate()
+    const [error, setError] = useState('')
+    const [borrowBook] = useBorrowBookMutation(undefined)
+    const { data, isLoading } = useGetASingleBookQuery(book)
+     if (isLoading) {
+        return <div className="sweet-loading flex justify-center py-10 ">
+
+
+
+            <PuffLoader />
+        </div>
+    }
+
+    const selectedBook = data?.data
+// console.log(selectedBook)
+
 
     const onSubmit = async (data: BorrowData) => {
 
@@ -109,7 +117,7 @@ const BorrowBook = ({ book }: { book: string }) => {
                                 name="quantity"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel >Quantity* ( Available: {selectedBook.copies} )</FormLabel>
+                                        <FormLabel >Quantity* ( Available: {selectedBook?.copies} )</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Book Quantity" {...field} />
 
