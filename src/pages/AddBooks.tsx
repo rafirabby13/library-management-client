@@ -102,7 +102,7 @@ const AddBooks = () => {
 
 
     return (
-        <div >
+        <div className="max-h-90vh">
 
             <Dialog open={open}
                 onOpenChange={(isOpen) => {
@@ -115,7 +115,7 @@ const AddBooks = () => {
                 <DialogTrigger >
                     <Button onClick={() => setOpen(true)} variant="outline" className="bg-lib-orange text-lib-white cursor-pointer">Add A Book</Button>
                 </DialogTrigger>
-                <DialogContent className="">
+                <DialogContent className="w-full sm:max-w-[480px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Add a new book</DialogTitle>
                         <DialogDescription>

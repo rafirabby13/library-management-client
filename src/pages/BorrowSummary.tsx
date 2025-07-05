@@ -5,7 +5,7 @@ import { PuffLoader } from "react-spinners"
 const BorrowSummary = () => {
   const { data, isError, isLoading } = useBorrowSummaryQuery(undefined)
   if (isLoading) {
-    return <div className="sweet-loading">
+    return <div className="sweet-loading  flex justify-center py-10">
 
 
 

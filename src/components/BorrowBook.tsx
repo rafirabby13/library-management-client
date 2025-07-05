@@ -94,7 +94,7 @@ const BorrowBook = ({ book }: { book: string }) => {
                 <DialogTrigger asChild>
                     <Button variant="outline" className="bg-lib-white text-lib-orange border-2 border-lib-orange font-bold cursor-pointer"><Handshake /></Button>
                 </DialogTrigger>
-                <DialogContent className="">
+                <DialogContent className="w-full sm:max-w-[480px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Borrow the book {selectedBook.title}</DialogTitle>
                         {/* <DialogDescription>

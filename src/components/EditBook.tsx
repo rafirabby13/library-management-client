@@ -129,7 +129,7 @@ const EditBook = ({ bookId }: {bookId: string}) => {
                 <DialogTrigger asChild>
                     <Button variant="outline" className="bg-lib-blue text-lib-white cursor-pointer"><Edit2 /></Button>
                 </DialogTrigger>
-                <DialogContent className="">
+                <DialogContent className="w-full sm:max-w-[480px] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Edit The Book - {book.title}</DialogTitle>
                         <DialogDescription>

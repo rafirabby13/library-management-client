@@ -77,7 +77,7 @@ const Navbar = ({
             <div className=" max-w-[85%] mx-auto">
                 {/* Desktop Menu */}
                 <nav className="hidden justify-between lg:flex">
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-36">
                         {/* Logo */}
                         <a href={logo.url} className="flex items-center gap-2">
                             <img src={logo.src} className="max-h-8 drop-shadow-lib-gray fill-white drop-shadow-xl/50" alt={logo.alt} />
@@ -110,7 +110,7 @@ const Navbar = ({
                         </Link>
                         <Sheet>
                             <SheetTrigger asChild>
-                                <Button variant="outline" size="icon">
+                                <Button variant="outline" size="icon" className="bg-lib-background text-lib-orange">
                                     <Menu className="size-4" />
                                 </Button>
                             </SheetTrigger>
@@ -131,14 +131,14 @@ const Navbar = ({
 
                                         {menu.map((item) => (<NavLink to={item.url} className={({ isActive }) =>
                                             isActive
-                                                ? "text-lib-green font-semibold border-b-2 border-lib-green"
+                                                ? "text-lib-green font-semibold border-b-2 border-lib-orange text-lib-orange"
                                                 : "text-lib-black font-semibold hover:text-lib-green"
                                         }>{item.title}</NavLink>))}
 
                                     </Accordion>
 
                                     <div className="flex flex-col gap-3">
-                                        <Button asChild variant="outline" className="bg-lib-green text-lib-white">
+                                        <Button asChild variant="outline" className="bg-lib-background text-lib-orange ">
                                             <a href={auth.login.url}>{auth.login.title}</a>
                                         </Button>
                                         <Button asChild>

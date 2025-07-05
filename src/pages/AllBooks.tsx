@@ -20,7 +20,7 @@ const AllBooks = () => {
     const { data, isLoading, isError } = useGetBooksQuery(undefined)
     const [deleteBook] = useDeleteBookMutation(undefined)
     if (isLoading) {
-        return <div className="sweet-loading">
+        return <div className="sweet-loading flex justify-center py-10 ">
 
 
 
@@ -71,9 +71,10 @@ const handleDeleteABook=(bookId: string)=>{
                         <TableHead className="">No.</TableHead>
                         <TableHead className="">Title</TableHead>
                         <TableHead className="">Author</TableHead>
-                        <TableHead>Available</TableHead>
-                        <TableHead>Copies</TableHead>
+                        <TableHead className="">ISBN</TableHead>
                         <TableHead >Genre</TableHead>
+                        <TableHead>Copies</TableHead>
+                        <TableHead>Available</TableHead>
                         <TableHead className="text-center">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -84,9 +85,10 @@ const handleDeleteABook=(bookId: string)=>{
                                 <TableCell className="font-medium">{i+1}</TableCell>
                                 <TableCell className="font-medium">{book.title}</TableCell>
                                 <TableCell className="font-medium">{book.author}</TableCell>
-                                <TableCell>{book.available ? "available" : "Not Available"}</TableCell>
-                                <TableCell>{book.copies}</TableCell>
-                                <TableCell >{book.genre}</TableCell>
+                                <TableCell className="font-medium">{book.isbn}</TableCell>
+                                <TableCell  className="font-medium">{book.genre}</TableCell>
+                                <TableCell  className="font-medium">{book.copies}</TableCell>
+                                <TableCell  className="font-medium">{book.available ? "available" : "Not Available"}</TableCell>
                                 <TableCell className="flex items-center gap-4 justify-center">
                                     
                                     <EditBook bookId={book._id} />

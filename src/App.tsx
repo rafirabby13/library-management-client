@@ -1,6 +1,7 @@
-import { Outlet, useLocation} from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 import { Navbar } from './pages/home/Navbar'
 import AllBooks from './pages/AllBooks'
+import { Footer } from './components/Footer'
 
 function App() {
 
@@ -8,8 +9,10 @@ function App() {
 
 
   return (
-    <div className='space-y-10'>
-      <Navbar />
+    <div >
+      <div className='mb-10'>
+        <Navbar />
+      </div>
       <div className='max-w-[85%] mx-auto'>
         {
           location.pathname == '/' && <AllBooks />
@@ -18,6 +21,10 @@ function App() {
       </div>
       <div className='max-w-[85%] mx-auto'>
         <Outlet />
+      </div>
+
+      <div className='mt-10'>
+        <Footer />
       </div>
 
 
