@@ -19,7 +19,7 @@ function App() {
 
         }
       </div>
-      <div className='max-w-[85%] mx-auto min-h-screen'>
+      <div className='max-w-[85%] mx-auto min-h-96'>
         <Outlet />
       </div>
 
